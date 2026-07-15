@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-bg text-slate-200 font-sans antialiased;
+    background-image: radial-gradient(1200px 600px at 100% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(56, 189, 248, 0.08), transparent 55%);
+    background-attachment: fixed;
+  }
+  /* Safe areas for installed PWA on phones */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-bg-card/80 border border-line rounded-2xl shadow-card backdrop-blur-sm;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    transition active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white hover:bg-brand-glow shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn bg-bg-hover/60 text-slate-200 hover:bg-bg-hover border border-line;
+  }
+  .btn-danger {
+    @apply btn bg-danger/15 text-red-300 hover:bg-danger/25 border border-danger/30;
+  }
+  .input {
+    @apply w-full rounded-xl bg-bg-soft border border-line px-3.5 py-2.5 text-sm text-slate-100
+    placeholder:text-slate-500 outline-none focus:border-brand-soft focus:ring-2 focus:ring-brand/30 transition;
+  }
+  .label {
+    @apply block text-[13px] font-medium text-slate-400 mb-1.5;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border;
+  }
+}
+
+/* Nicer scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #24314c;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
