@@ -2,12 +2,11 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Nom du dépôt GitHub → base des chemins pour GitHub Pages.
-const REPO = 'automatisation-entreprise'
-
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? `/${REPO}/` : '/',
+export default defineConfig(() => ({
+  // Chemins RELATIFS : le build fonctionne quel que soit l'endroit où il est servi
+  // (racine d'un domaine, sous-dossier GitHub Pages, tunnel, prévisualisation…).
+  base: './',
   plugins: [
     react(),
     VitePWA({
