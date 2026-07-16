@@ -13,6 +13,13 @@ import {
   Send,
   Image as ImageIcon,
   AlertTriangle,
+  List,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Wand2,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
 import { uid, nowISO, dateTimeLabel } from '../lib/format'
@@ -23,8 +30,18 @@ import {
   type Post,
   type PostStatus,
 } from '../lib/types'
-import { Modal, EmptyState, Field, PageHeader } from '../components/ui'
+import { Modal, EmptyState, Field, PageHeader, Segmented } from '../components/ui'
 import { cloudEnabled } from '../lib/supabase'
+import { PostPreview, MonthCalendar } from '../components/SocialExtras'
+import {
+  OBJECTIFS,
+  QUICK_TEMPLATES,
+  generateCaption,
+  generateHashtags,
+  type Objectif,
+} from '../lib/socialTemplates'
+import { addMonths, format, isSameDay, parseISO } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 const PLATFORM_ICON: Record<Platform, JSX.Element> = {
   facebook: <Facebook size={14} />,
@@ -46,11 +63,15 @@ export default function Social() {
   const { data, addPost, updatePost, deletePost } = useApp()
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<Post | null>(null)
+  const [view, setView] = useState<'liste' | 'calendrier'>('liste')
+  const [calMonth, setCalMonth] = useState(new Date())
+  const [selectedDay, setSelectedDay] = useState<Date | null>(new Date())
+  const [presetDate, setPresetDate] = useState<Date | null>(null)
 
   const groups = useMemo(() => {
     const programme = data.posts
       .filter((p) => p.status === 'programme')
-      .sort((a, b) => (a.scheduledAt ?? '') > (b.scheduledAt ?? '') ? 1 : -1)
+      .sort((a, b) => ((a.scheduledAt ?? '') > (b.scheduledAt ?? '') ? 1 : -1))
     const brouillon = data.posts.filter((p) => p.status === 'brouillon')
     const publie = data.posts
       .filter((p) => p.status === 'publie' || p.status === 'echec')
@@ -58,16 +79,29 @@ export default function Social() {
     return { programme, brouillon, publie }
   }, [data.posts])
 
+  const dayPosts = useMemo(() => {
+    if (!selectedDay) return []
+    return data.posts.filter((p) => p.scheduledAt && isSameDay(parseISO(p.scheduledAt), selectedDay))
+  }, [data.posts, selectedDay])
+
   function openNew() {
     setEditing(null)
+    setPresetDate(null)
     setOpen(true)
   }
+  function openForDay(d: Date) {
+    setEditing(null)
+    setPresetDate(d)
+    setOpen(true)
+  }
+
+  const empty = groups.programme.length === 0 && groups.brouillon.length === 0 && groups.publie.length === 0
 
   return (
     <div className="space-y-5">
       <PageHeader
         title="Réseaux sociaux"
-        subtitle="Préparez et programmez vos publications"
+        subtitle="Préparez, programmez et générez vos publications"
         action={
           <button className="btn-primary hidden sm:inline-flex" onClick={openNew}>
             <Plus size={18} /> Nouveau post
@@ -90,11 +124,60 @@ export default function Social() {
         </div>
       </div>
 
-      {groups.programme.length === 0 && groups.brouillon.length === 0 && groups.publie.length === 0 ? (
+      {/* Bascule Liste / Calendrier */}
+      <div className="flex justify-center sm:justify-start">
+        <Segmented
+          value={view}
+          onChange={setView}
+          options={[
+            { value: 'liste', label: 'Liste', icon: <List size={15} /> },
+            { value: 'calendrier', label: 'Calendrier', icon: <CalendarDays size={15} /> },
+          ]}
+        />
+      </div>
+
+      {view === 'calendrier' ? (
+        <div className="grid lg:grid-cols-2 gap-4">
+          <div className="card p-4 sm:p-5">
+            <div className="flex items-center justify-between mb-4">
+              <button className="p-2 rounded-lg hover:bg-bg-hover text-ink3" onClick={() => setCalMonth(addMonths(calMonth, -1))}>
+                <ChevronLeft size={18} />
+              </button>
+              <span className="text-sm font-bold text-ink capitalize">{format(calMonth, 'MMMM yyyy', { locale: fr })}</span>
+              <button className="p-2 rounded-lg hover:bg-bg-hover text-ink3" onClick={() => setCalMonth(addMonths(calMonth, 1))}>
+                <ChevronRight size={18} />
+              </button>
+            </div>
+            <MonthCalendar month={calMonth} posts={data.posts} onSelectDay={setSelectedDay} selectedDay={selectedDay} />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold text-ink2 capitalize">
+                {selectedDay ? format(selectedDay, 'EEEE d MMMM', { locale: fr }) : 'Sélectionnez un jour'}
+              </p>
+              {selectedDay && (
+                <button className="btn-primary !py-2 !px-3 text-xs" onClick={() => openForDay(selectedDay)}>
+                  <Plus size={14} /> Programmer
+                </button>
+              )}
+            </div>
+            {dayPosts.length === 0 ? (
+              <div className="card p-6 text-center text-sm text-ink3">Aucun post ce jour-là.</div>
+            ) : (
+              <div className="space-y-3">
+                {dayPosts.map((p) => (
+                  <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setPresetDate(null); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : empty ? (
         <EmptyState
           icon={<Megaphone size={26} />}
           title="Aucune publication"
-          hint="Créez votre premier post pour Facebook, Instagram ou TikTok, en brouillon ou programmé."
+          hint="Créez votre premier post pour Facebook, Instagram ou TikTok — l'assistant peut même rédiger le texte pour vous."
           action={
             <button className="btn-primary" onClick={openNew}>
               <Plus size={18} /> Créer un post
@@ -105,17 +188,17 @@ export default function Social() {
         <div className="space-y-6">
           <Section title="Programmés" icon={<Clock size={16} />} count={groups.programme.length}>
             {groups.programme.map((p) => (
-              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
+              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setPresetDate(null); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
             ))}
           </Section>
           <Section title="Brouillons" icon={<ImageIcon size={16} />} count={groups.brouillon.length}>
             {groups.brouillon.map((p) => (
-              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
+              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setPresetDate(null); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
             ))}
           </Section>
           <Section title="Publiés" icon={<CheckCircle2 size={16} />} count={groups.publie.length}>
             {groups.publie.map((p) => (
-              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
+              <PostCard key={p.id} post={p} onEdit={() => { setEditing(p); setPresetDate(null); setOpen(true) }} onDelete={() => deletePost(p.id)} onPublish={() => updatePost({ ...p, status: 'publie' })} />
             ))}
           </Section>
         </div>
@@ -133,6 +216,7 @@ export default function Social() {
         open={open}
         onClose={() => setOpen(false)}
         editing={editing}
+        presetDate={presetDate}
         onSave={(p) => {
           if (editing) updatePost(p)
           else addPost(p)
@@ -226,32 +310,51 @@ function PostModal({
   open,
   onClose,
   editing,
+  presetDate,
   onSave,
 }: {
   open: boolean
   onClose: () => void
   editing: Post | null
+  presetDate: Date | null
   onSave: (p: Post) => void
 }) {
+  const { settings } = useApp()
   const [content, setContent] = useState('')
   const [platforms, setPlatforms] = useState<Platform[]>(['facebook'])
   const [mediaUrl, setMediaUrl] = useState('')
   const [schedule, setSchedule] = useState(false)
   const [when, setWhen] = useState('')
+  const [showAssist, setShowAssist] = useState(false)
+  const [showPreview, setShowPreview] = useState(true)
+  const [objectif, setObjectif] = useState<Objectif>('promo')
+  const [sujet, setSujet] = useState('')
 
-  // Synchronise l'état avec le post en édition à l'ouverture
   useEffect(() => {
     if (open) {
       setContent(editing?.content ?? '')
       setPlatforms(editing?.platforms ?? ['facebook'])
       setMediaUrl(editing?.mediaUrl ?? '')
-      setSchedule(!!editing?.scheduledAt)
-      setWhen(editing?.scheduledAt ? editing.scheduledAt.slice(0, 16) : defaultWhen())
+      const presetISO = presetDate ? isoAt(presetDate, 9) : null
+      setSchedule(!!editing?.scheduledAt || !!presetDate)
+      setWhen(
+        editing?.scheduledAt ? editing.scheduledAt.slice(0, 16) : presetISO ?? defaultWhen(),
+      )
+      setShowAssist(!editing)
+      setSujet('')
     }
-  }, [open, editing])
+  }, [open, editing, presetDate])
 
   function togglePlatform(pl: Platform) {
     setPlatforms((cur) => (cur.includes(pl) ? cur.filter((x) => x !== pl) : [...cur, pl]))
+  }
+
+  function generer() {
+    setContent(generateCaption(objectif, sujet, settings.businessName))
+  }
+  function ajouterHashtags() {
+    const tags = generateHashtags(objectif, sujet)
+    setContent((c) => (c.trim() ? `${c.trim()}\n\n${tags}` : tags))
   }
 
   const valid = content.trim().length > 0 && platforms.length > 0 && (!schedule || !!when)
@@ -298,23 +401,74 @@ function PostModal({
           </div>
         </Field>
 
+        {/* Assistant de rédaction */}
+        <div className="rounded-2xl border border-brand/20 bg-brand/[0.04] overflow-hidden">
+          <button
+            onClick={() => setShowAssist((s) => !s)}
+            className="w-full flex items-center gap-2 px-3.5 py-2.5 text-sm font-semibold text-brand-soft"
+          >
+            <Wand2 size={16} /> Assistant de rédaction
+            <span className="ml-auto text-xs text-ink3">{showAssist ? 'masquer' : 'afficher'}</span>
+          </button>
+          {showAssist && (
+            <div className="px-3.5 pb-3.5 space-y-3">
+              <div className="flex flex-wrap gap-1.5">
+                {QUICK_TEMPLATES.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => {
+                      setObjectif(t.objectif)
+                      setContent(generateCaption(t.objectif, sujet, settings.businessName))
+                    }}
+                    className="chip border-line bg-white text-ink2 hover:border-brand hover:text-brand-soft"
+                  >
+                    {t.emoji} {t.title}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <select className="input" value={objectif} onChange={(e) => setObjectif(e.target.value as Objectif)}>
+                  {OBJECTIFS.map((o) => (
+                    <option key={o.value} value={o.value}>{o.emoji} {o.label}</option>
+                  ))}
+                </select>
+                <input className="input" placeholder="Sujet (ex : nos jus)" value={sujet} onChange={(e) => setSujet(e.target.value)} />
+              </div>
+              <div className="flex gap-2">
+                <button className="btn-blue flex-1 !py-2 text-xs" onClick={generer}><Wand2 size={14} /> Générer le texte</button>
+                <button className="btn-ghost !py-2 text-xs" onClick={ajouterHashtags}># Hashtags</button>
+              </div>
+            </div>
+          )}
+        </div>
+
         <Field label="Texte du post">
           <textarea
-            autoFocus
-            className="input min-h-[130px] leading-relaxed"
-            placeholder="Rédigez votre publication… #hashtags bienvenus"
+            className="input min-h-[120px] leading-relaxed"
+            placeholder="Rédigez votre publication, ou utilisez l'assistant ci-dessus…"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
           <p className="text-xs text-ink3 mt-1">{content.length} caractères</p>
         </Field>
 
-        <Field label="Image / vidéo (lien, optionnel)" hint="Collez l'URL d'une image ou d'une vidéo à joindre.">
+        <Field label="Image / vidéo (lien, optionnel)" hint="Collez l'URL d'une image à joindre.">
           <input className="input" placeholder="https://…" value={mediaUrl} onChange={(e) => setMediaUrl(e.target.value)} />
         </Field>
 
+        {/* Aperçu */}
+        <div>
+          <button
+            onClick={() => setShowPreview((s) => !s)}
+            className="flex items-center gap-2 text-[13px] font-semibold text-ink3 mb-2"
+          >
+            {showPreview ? <EyeOff size={14} /> : <Eye size={14} />} {showPreview ? 'Masquer' : 'Afficher'} l’aperçu
+          </button>
+          {showPreview && <PostPreview businessName={settings.businessName} content={content} mediaUrl={mediaUrl} />}
+        </div>
+
         <label className="flex items-center gap-3 cursor-pointer select-none">
-          <input type="checkbox" checked={schedule} onChange={(e) => setSchedule(e.target.checked)} className="w-4 h-4 accent-brand" />
+          <input type="checkbox" checked={schedule} onChange={(e) => setSchedule(e.target.checked)} className="w-4 h-4 accent-[#F24B5E]" />
           <span className="text-sm text-ink2">Programmer une date et heure</span>
         </label>
 
@@ -331,6 +485,14 @@ function PostModal({
 function defaultWhen(): string {
   const d = new Date()
   d.setHours(d.getHours() + 1, 0, 0, 0)
+  return localISO(d)
+}
+function isoAt(date: Date, hour: number): string {
+  const d = new Date(date)
+  d.setHours(hour, 0, 0, 0)
+  return localISO(d)
+}
+function localISO(d: Date): string {
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
 }
 
