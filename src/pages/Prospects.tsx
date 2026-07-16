@@ -35,7 +35,7 @@ const STATUS_STYLE: Record<ProspectStatus, string> = {
   contacte: 'border-brand/30 bg-brand/10 text-brand-soft',
   relance: 'border-warn/30 bg-warn/10 text-warn',
   client: 'border-ok/30 bg-ok/10 text-ok',
-  perdu: 'border-line bg-bg-hover text-slate-500',
+  perdu: 'border-line bg-bg-hover text-ink3',
 }
 
 export default function Prospects() {
@@ -79,7 +79,7 @@ export default function Prospects() {
 
       {/* Recherche */}
       <div className="relative">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink3" />
         <input
           className="input pl-10"
           placeholder="Rechercher un prospect…"
@@ -185,7 +185,7 @@ function Chip({
     <button
       onClick={onClick}
       className={`chip shrink-0 whitespace-nowrap transition ${
-        active ? 'border-brand bg-brand/15 text-brand-soft' : className ?? 'border-line bg-bg-hover text-slate-400'
+        active ? 'border-brand bg-brand/15 text-brand-soft' : className ?? 'border-line bg-bg-hover text-ink3'
       }`}
     >
       {label}
@@ -210,10 +210,10 @@ function ProspectRow({
         {initials(p.name)}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-slate-200 truncate">{p.name}</p>
-        <p className="text-xs text-slate-500 flex items-center gap-1.5 truncate">
+        <p className="text-sm font-medium text-ink truncate">{p.name}</p>
+        <p className="text-xs text-ink3 flex items-center gap-1.5 truncate">
           {p.phone ? <><Phone size={11} /> {p.phone}</> : p.email ? <><Mail size={11} /> {p.email}</> : 'Pas de contact'}
-          {p.lastContact && <span className="text-slate-600">· vu {dateLabel(p.lastContact)}</span>}
+          {p.lastContact && <span className="text-ink4">· vu {dateLabel(p.lastContact)}</span>}
         </p>
       </div>
       <select
@@ -222,7 +222,7 @@ function ProspectRow({
         className={`chip cursor-pointer ${STATUS_STYLE[p.status]} appearance-none pr-2`}
       >
         {STATUS_ORDER.map((s) => (
-          <option key={s} value={s} className="bg-bg-card text-slate-200">
+          <option key={s} value={s} className="bg-bg-card text-ink">
             {STATUS_LABELS[s]}
           </option>
         ))}
@@ -232,7 +232,7 @@ function ProspectRow({
       </button>
       <button
         onClick={onDelete}
-        className="p-2 rounded-lg text-slate-600 hover:text-red-300 hover:bg-danger/10 hidden sm:block"
+        className="p-2 rounded-lg text-ink4 hover:text-danger hover:bg-danger/10 hidden sm:block"
         aria-label="Supprimer"
       >
         <Trash2 size={16} />
@@ -380,7 +380,7 @@ function MessageComposer({
               <button
                 key={t.id}
                 onClick={() => applyTemplate(t.id)}
-                className={`chip transition ${tplId === t.id ? 'border-brand bg-brand/15 text-brand-soft' : 'border-line bg-bg-hover text-slate-400'}`}
+                className={`chip transition ${tplId === t.id ? 'border-brand bg-brand/15 text-brand-soft' : 'border-line bg-bg-hover text-ink3'}`}
               >
                 {t.title}
               </button>
@@ -394,7 +394,7 @@ function MessageComposer({
               <button
                 key={c}
                 onClick={() => setChannel(c)}
-                className={`btn flex-1 ${channel === c ? 'bg-brand text-white' : 'bg-bg-hover text-slate-300 border border-line'}`}
+                className={`btn flex-1 ${channel === c ? 'bg-brand text-white' : 'bg-bg-hover text-ink2 border border-line'}`}
               >
                 {c === 'whatsapp' ? 'WhatsApp' : c === 'sms' ? 'SMS' : 'E-mail'}
               </button>
@@ -456,7 +456,7 @@ function CampaignModal({
   return (
     <Modal open={open} onClose={onClose} title="Message groupé">
       <div className="space-y-4">
-        <p className="text-xs text-slate-400 bg-bg-soft border border-line rounded-lg px-3 py-2">
+        <p className="text-xs text-ink3 bg-bg-soft border border-line rounded-lg px-3 py-2">
           Envoyez le même message à plusieurs prospects, un par un (ouverture de WhatsApp/SMS/e-mail pré-rempli).
           Pour un envoi <strong>100% automatique en masse</strong>, l'API WhatsApp Business est nécessaire — voir Réglages.
         </p>
@@ -484,17 +484,17 @@ function CampaignModal({
         </Field>
 
         <div>
-          <p className="text-sm font-semibold text-slate-300 mb-2">
-            Destinataires · {recipients.length} <span className="text-slate-500">({sent.size} envoyés)</span>
+          <p className="text-sm font-semibold text-ink2 mb-2">
+            Destinataires · {recipients.length} <span className="text-ink3">({sent.size} envoyés)</span>
           </p>
           <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-            {recipients.length === 0 && <p className="text-sm text-slate-500">Aucun prospect ne correspond.</p>}
+            {recipients.length === 0 && <p className="text-sm text-ink3">Aucun prospect ne correspond.</p>}
             {recipients.map((p) => (
               <div key={p.id} className="flex items-center gap-3 card px-3 py-2">
                 <div className="w-8 h-8 rounded-full bg-brand/20 grid place-items-center text-xs font-bold text-brand-soft">
                   {initials(p.name)}
                 </div>
-                <span className="text-sm text-slate-200 flex-1 truncate">{p.name}</span>
+                <span className="text-sm text-ink flex-1 truncate">{p.name}</span>
                 <button
                   onClick={() => sendTo(p)}
                   className={`btn !px-3 !py-1.5 text-xs ${sent.has(p.id) ? 'bg-ok/15 text-ok border border-ok/30' : 'btn-primary'}`}

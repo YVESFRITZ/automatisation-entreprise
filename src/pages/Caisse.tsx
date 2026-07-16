@@ -80,11 +80,11 @@ export default function Caisse() {
 
       {/* Sélecteur de mois */}
       <div className="flex items-center justify-between card px-3 py-2">
-        <button className="p-2 rounded-lg hover:bg-bg-hover text-slate-400" onClick={() => shiftMonth(-1)}>
+        <button className="p-2 rounded-lg hover:bg-bg-hover text-ink3" onClick={() => shiftMonth(-1)}>
           <ChevronLeft size={18} />
         </button>
-        <span className="text-sm font-semibold text-slate-200 capitalize">{monthLabel(month)}</span>
-        <button className="p-2 rounded-lg hover:bg-bg-hover text-slate-400" onClick={() => shiftMonth(1)}>
+        <span className="text-sm font-semibold text-ink capitalize">{monthLabel(month)}</span>
+        <button className="p-2 rounded-lg hover:bg-bg-hover text-ink3" onClick={() => shiftMonth(1)}>
           <ChevronRight size={18} />
         </button>
       </div>
@@ -105,7 +105,7 @@ export default function Caisse() {
 
       {/* Graphique 6 mois */}
       <div className="card p-4 sm:p-5">
-        <p className="text-sm font-semibold text-slate-300 mb-4">6 derniers mois</p>
+        <p className="text-sm font-semibold text-ink2 mb-4">6 derniers mois</p>
         <GroupedBars data={chartData} currency={currency} />
       </div>
 
@@ -114,15 +114,15 @@ export default function Caisse() {
         <button className="btn bg-ok/15 text-ok border border-ok/30" onClick={() => openAdd('entree')}>
           <ArrowDownLeft size={18} /> Entrée
         </button>
-        <button className="btn bg-danger/15 text-red-300 border border-danger/30" onClick={() => openAdd('sortie')}>
+        <button className="btn bg-danger/15 text-danger border border-danger/30" onClick={() => openAdd('sortie')}>
           <ArrowUpRight size={18} /> Sortie
         </button>
       </div>
 
       {/* Liste */}
       <div>
-        <p className="text-sm font-semibold text-slate-300 mb-3">
-          Opérations · <span className="text-slate-500">{monthTx.length}</span>
+        <p className="text-sm font-semibold text-ink2 mb-3">
+          Opérations · <span className="text-ink3">{monthTx.length}</span>
         </p>
         {monthTx.length === 0 ? (
           <EmptyState
@@ -172,26 +172,26 @@ function TxRow({ tx, currency, onDelete }: { tx: Transaction; currency: string; 
     <div className="card px-3.5 py-3 flex items-center gap-3 group">
       <div
         className={`w-10 h-10 rounded-xl grid place-items-center shrink-0 ${
-          isIn ? 'bg-ok/10 text-ok' : 'bg-danger/10 text-red-300'
+          isIn ? 'bg-ok/10 text-ok' : 'bg-danger/10 text-danger'
         }`}
       >
         {isIn ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-slate-200 truncate">{tx.label || tx.category}</p>
-        <p className="text-xs text-slate-500">
+        <p className="text-sm font-medium text-ink truncate">{tx.label || tx.category}</p>
+        <p className="text-xs text-ink3">
           {tx.category} · {dateLabel(tx.date)}
         </p>
       </div>
       <div className="text-right shrink-0">
-        <p className={`text-sm font-semibold tabular-nums ${isIn ? 'text-ok' : 'text-red-300'}`}>
+        <p className={`text-sm font-semibold tabular-nums ${isIn ? 'text-ok' : 'text-danger'}`}>
           {isIn ? '+' : '−'}
           {money(tx.amount, currency)}
         </p>
       </div>
       <button
         onClick={onDelete}
-        className="p-2 rounded-lg text-slate-600 hover:text-red-300 hover:bg-danger/10 opacity-0 group-hover:opacity-100 transition"
+        className="p-2 rounded-lg text-ink4 hover:text-danger hover:bg-danger/10 opacity-0 group-hover:opacity-100 transition"
         aria-label="Supprimer"
       >
         <Trash2 size={16} />
@@ -278,7 +278,7 @@ function TransactionModal({
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^\d\s.,]/g, ''))}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-semibold text-sm">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-ink3 font-semibold text-sm">
               FCFA
             </span>
           </div>

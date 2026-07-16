@@ -41,8 +41,8 @@ export function AuthGate() {
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-soft to-brand-glow grid place-items-center shadow-glow">
             <Sparkles className="text-white" size={24} />
           </div>
-          <h1 className="mt-4 text-xl font-bold text-slate-50">Automatisation Entreprise</h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <h1 className="mt-4 text-xl font-bold text-ink">Automatisation Entreprise</h1>
+          <p className="text-sm text-ink3 mt-1">
             Connectez-vous pour retrouver vos données sur tous vos appareils.
           </p>
         </div>
@@ -72,7 +72,7 @@ export function AuthGate() {
             />
           </div>
 
-          {err && <p className="text-sm text-red-300 bg-danger/10 border border-danger/30 rounded-lg px-3 py-2">{err}</p>}
+          {err && <p className="text-sm text-danger bg-danger/10 border border-danger/30 rounded-lg px-3 py-2">{err}</p>}
           {msg && <p className="text-sm text-ok bg-ok/10 border border-ok/30 rounded-lg px-3 py-2">{msg}</p>}
 
           <button type="submit" disabled={busy} className="btn-primary w-full">
@@ -86,7 +86,7 @@ export function AuthGate() {
               setMode(mode === 'in' ? 'up' : 'in')
               setErr(null)
             }}
-            className="w-full text-sm text-slate-400 hover:text-slate-200"
+            className="w-full text-sm text-ink3 hover:text-ink"
           >
             {mode === 'in' ? "Pas encore de compte ? Créer un compte" : "J'ai déjà un compte — Se connecter"}
           </button>

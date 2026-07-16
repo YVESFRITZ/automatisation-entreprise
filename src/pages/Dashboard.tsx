@@ -55,21 +55,31 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-slate-400">{greeting} 👋</p>
-        <h1 className="text-2xl font-bold text-slate-50 tracking-tight">{settings.businessName || 'Mon Entreprise'}</h1>
+        <p className="text-sm font-medium text-ink3">{greeting} 👋</p>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">{settings.businessName || 'Mon Entreprise'}</h1>
       </div>
 
-      {/* Solde du mois — carte principale */}
-      <div className="card p-5 sm:p-6 relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-brand/20 blur-3xl" />
+      {/* Solde du mois — carte principale (dégradé premium) */}
+      <div
+        className="relative overflow-hidden rounded-3xl p-6 sm:p-7 shadow-nav text-white"
+        style={{ backgroundImage: 'linear-gradient(135deg,#1B2942 0%,#0F1728 55%,#0B111E 100%)' }}
+      >
+        <div className="absolute -top-20 -right-16 w-56 h-56 rounded-full bg-brand/30 blur-3xl" />
+        <div className="absolute -bottom-24 -left-10 w-56 h-56 rounded-full bg-azure/25 blur-3xl" />
         <div className="relative">
-          <p className="text-sm text-slate-400">Solde du mois</p>
-          <p className={`mt-1 text-4xl font-black tracking-tight tabular-nums ${stats.net >= 0 ? 'text-slate-50' : 'text-red-300'}`}>
+          <p className="text-sm font-medium text-white/55">Solde du mois</p>
+          <p className="mt-1.5 text-[2.5rem] sm:text-5xl font-extrabold tracking-tight tabular-nums leading-none">
             {money(stats.net, currency)}
           </p>
-          <div className="mt-4 flex gap-4 text-sm">
-            <span className="flex items-center gap-1.5 text-ok"><ArrowDownLeft size={15} /> {money(stats.entree, currency)}</span>
-            <span className="flex items-center gap-1.5 text-red-300"><ArrowUpRight size={15} /> {money(stats.sortie, currency)}</span>
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold">
+              <ArrowDownLeft size={15} className="text-emerald-300" />
+              <span className="text-white/90">{money(stats.entree, currency)}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold">
+              <ArrowUpRight size={15} className="text-rose-300" />
+              <span className="text-white/90">{money(stats.sortie, currency)}</span>
+            </span>
           </div>
         </div>
       </div>
@@ -95,19 +105,19 @@ export default function Dashboard() {
         <div>
           <SectionHead title="Dernières opérations" onSee={() => navigate('/caisse')} />
           {recentTx.length === 0 ? (
-            <p className="text-sm text-slate-500 card p-4">Aucune opération pour l'instant.</p>
+            <p className="text-sm text-ink3 card p-4">Aucune opération pour l'instant.</p>
           ) : (
             <div className="space-y-2">
               {recentTx.map((t) => (
                 <div key={t.id} className="card px-3.5 py-2.5 flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-lg grid place-items-center shrink-0 ${t.type === 'entree' ? 'bg-ok/10 text-ok' : 'bg-danger/10 text-red-300'}`}>
+                  <div className={`w-9 h-9 rounded-lg grid place-items-center shrink-0 ${t.type === 'entree' ? 'bg-ok/10 text-ok' : 'bg-danger/10 text-danger'}`}>
                     {t.type === 'entree' ? <ArrowDownLeft size={16} /> : <ArrowUpRight size={16} />}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-slate-200 truncate">{t.label || t.category}</p>
-                    <p className="text-xs text-slate-500">{dateLabel(t.date)}</p>
+                    <p className="text-sm text-ink truncate">{t.label || t.category}</p>
+                    <p className="text-xs text-ink3">{dateLabel(t.date)}</p>
                   </div>
-                  <span className={`text-sm font-semibold tabular-nums ${t.type === 'entree' ? 'text-ok' : 'text-red-300'}`}>
+                  <span className={`text-sm font-semibold tabular-nums ${t.type === 'entree' ? 'text-ok' : 'text-danger'}`}>
                     {t.type === 'entree' ? '+' : '−'}{money(t.amount, currency)}
                   </span>
                 </div>
@@ -121,18 +131,18 @@ export default function Dashboard() {
           <div>
             <SectionHead title="Prochains posts" onSee={() => navigate('/reseaux')} />
             {upcoming.length === 0 ? (
-              <p className="text-sm text-slate-500 card p-4">Aucun post programmé.</p>
+              <p className="text-sm text-ink3 card p-4">Aucun post programmé.</p>
             ) : (
               <div className="space-y-2">
                 {upcoming.map((p) => (
                   <div key={p.id} className="card px-3.5 py-2.5">
                     <div className="flex items-center gap-2 mb-1">
                       {p.platforms.map((pl: Platform) => (
-                        <span key={pl} className="text-[11px] text-slate-400">{PLATFORM_LABELS[pl]}</span>
+                        <span key={pl} className="text-[11px] text-ink3">{PLATFORM_LABELS[pl]}</span>
                       ))}
                       {p.scheduledAt && <span className="text-[11px] text-warn ml-auto">{dateTimeLabel(p.scheduledAt)}</span>}
                     </div>
-                    <p className="text-sm text-slate-300 line-clamp-2">{p.content}</p>
+                    <p className="text-sm text-ink2 line-clamp-2">{p.content}</p>
                   </div>
                 ))}
               </div>
@@ -142,13 +152,13 @@ export default function Dashboard() {
           <div>
             <SectionHead title="Prospects à relancer" onSee={() => navigate('/prospects')} />
             {toFollow.length === 0 ? (
-              <p className="text-sm text-slate-500 card p-4">Personne à relancer. 🎉</p>
+              <p className="text-sm text-ink3 card p-4">Personne à relancer. 🎉</p>
             ) : (
               <div className="space-y-2">
                 {toFollow.map((p) => (
                   <div key={p.id} className="card px-3.5 py-2.5 flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-brand/20 grid place-items-center text-xs font-bold text-brand-soft">{initials(p.name)}</div>
-                    <span className="text-sm text-slate-200 flex-1 truncate">{p.name}</span>
+                    <span className="text-sm text-ink flex-1 truncate">{p.name}</span>
                     <button onClick={() => navigate('/prospects')} className="text-brand-soft"><ChevronRight size={18} /></button>
                   </div>
                 ))}
@@ -164,14 +174,14 @@ export default function Dashboard() {
 function QuickAction({ icon, label, onClick, tone }: { icon: JSX.Element; label: string; onClick: () => void; tone: 'ok' | 'danger' | 'brand' | 'info' }) {
   const tones = {
     ok: 'text-ok bg-ok/10 border-ok/20',
-    danger: 'text-red-300 bg-danger/10 border-danger/20',
+    danger: 'text-danger bg-danger/10 border-danger/20',
     brand: 'text-brand-soft bg-brand/10 border-brand/20',
     info: 'text-info bg-info/10 border-info/20',
   }
   return (
     <button onClick={onClick} className={`card p-3.5 flex items-center gap-2.5 hover:bg-bg-hover transition border ${tones[tone]}`}>
       {icon}
-      <span className="text-sm font-semibold text-slate-200">{label}</span>
+      <span className="text-sm font-semibold text-ink">{label}</span>
     </button>
   )
 }
@@ -179,7 +189,7 @@ function QuickAction({ icon, label, onClick, tone }: { icon: JSX.Element; label:
 function SectionHead({ title, onSee }: { title: string; onSee: () => void }) {
   return (
     <div className="flex items-center justify-between mb-3">
-      <p className="text-sm font-semibold text-slate-300">{title}</p>
+      <p className="text-sm font-semibold text-ink2">{title}</p>
       <button onClick={onSee} className="text-xs text-brand-soft flex items-center gap-0.5 hover:underline">
         Voir tout <ChevronRight size={14} />
       </button>

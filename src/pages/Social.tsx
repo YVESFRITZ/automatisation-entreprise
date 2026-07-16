@@ -32,9 +32,9 @@ const PLATFORM_ICON: Record<Platform, JSX.Element> = {
   tiktok: <TikTokIcon />,
 }
 const PLATFORM_COLOR: Record<Platform, string> = {
-  facebook: 'text-[#60a5fa] bg-[#1d4ed8]/15 border-[#1d4ed8]/30',
-  instagram: 'text-[#f0abfc] bg-[#be185d]/15 border-[#be185d]/30',
-  tiktok: 'text-slate-100 bg-slate-100/10 border-slate-100/20',
+  facebook: 'text-[#1877F2] bg-[#1877F2]/10 border-[#1877F2]/20',
+  instagram: 'text-[#C13584] bg-[#E1306C]/10 border-[#E1306C]/20',
+  tiktok: 'text-ink bg-ink/[0.06] border-ink/15',
 }
 const CREATE_URL: Record<Platform, string> = {
   facebook: 'https://www.facebook.com/',
@@ -80,9 +80,9 @@ export default function Social() {
         <div className="w-9 h-9 rounded-xl bg-brand/10 text-brand-soft grid place-items-center shrink-0">
           <Megaphone size={18} />
         </div>
-        <div className="text-sm text-slate-300">
-          <p className="font-semibold text-slate-100">Publication automatique</p>
-          <p className="text-slate-400 mt-0.5">
+        <div className="text-sm text-ink2">
+          <p className="font-semibold text-ink">Publication automatique</p>
+          <p className="text-ink3 mt-0.5">
             {cloudEnabled
               ? "Une fois vos comptes connectés dans Réglages, les posts programmés partent tout seuls à l'heure prévue."
               : "Programmez vos posts ici. Pour la publication 100% automatique, activez le cloud puis connectez vos comptes (Réglages)."}
@@ -147,8 +147,8 @@ function Section({ title, icon, count, children }: { title: string; icon: JSX.El
   if (count === 0) return null
   return (
     <div>
-      <p className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-        <span className="text-slate-500">{icon}</span> {title} <span className="text-slate-500">· {count}</span>
+      <p className="text-sm font-semibold text-ink2 mb-3 flex items-center gap-2">
+        <span className="text-ink3">{icon}</span> {title} <span className="text-ink3">· {count}</span>
       </p>
       <div className="grid sm:grid-cols-2 gap-3">{children}</div>
     </div>
@@ -183,15 +183,15 @@ function PostCard({ post, onEdit, onDelete, onPublish }: { post: Post; onEdit: (
         </div>
       )}
 
-      <p className="text-sm text-slate-300 whitespace-pre-wrap line-clamp-4">{post.content}</p>
+      <p className="text-sm text-ink2 whitespace-pre-wrap line-clamp-4">{post.content}</p>
 
       {post.scheduledAt && (
-        <p className="text-xs text-slate-500 flex items-center gap-1.5">
+        <p className="text-xs text-ink3 flex items-center gap-1.5">
           <Calendar size={12} /> {dateTimeLabel(post.scheduledAt)}
         </p>
       )}
       {post.status === 'echec' && post.error && (
-        <p className="text-xs text-red-300 flex items-center gap-1.5"><AlertTriangle size={12} /> {post.error}</p>
+        <p className="text-xs text-danger flex items-center gap-1.5"><AlertTriangle size={12} /> {post.error}</p>
       )}
 
       <div className="flex items-center gap-2 mt-auto pt-1">
@@ -204,7 +204,7 @@ function PostCard({ post, onEdit, onDelete, onPublish }: { post: Post; onEdit: (
           </button>
         )}
         <button onClick={onEdit} className="btn-ghost !py-2 !px-3 text-xs">Modifier</button>
-        <button onClick={onDelete} className="p-2 rounded-lg text-slate-600 hover:text-red-300 hover:bg-danger/10">
+        <button onClick={onDelete} className="p-2 rounded-lg text-ink4 hover:text-danger hover:bg-danger/10">
           <Trash2 size={15} />
         </button>
       </div>
@@ -214,10 +214,10 @@ function PostCard({ post, onEdit, onDelete, onPublish }: { post: Post; onEdit: (
 
 function StatusBadge({ status }: { status: PostStatus }) {
   const style: Record<PostStatus, string> = {
-    brouillon: 'border-line bg-bg-hover text-slate-400',
+    brouillon: 'border-line bg-bg-hover text-ink3',
     programme: 'border-warn/30 bg-warn/10 text-warn',
     publie: 'border-ok/30 bg-ok/10 text-ok',
-    echec: 'border-danger/30 bg-danger/10 text-red-300',
+    echec: 'border-danger/30 bg-danger/10 text-danger',
   }
   return <span className={`chip ${style[status]}`}>{POST_STATUS_LABELS[status]}</span>
 }
@@ -290,7 +290,7 @@ function PostModal({
               <button
                 key={pl}
                 onClick={() => togglePlatform(pl)}
-                className={`btn flex-1 border ${platforms.includes(pl) ? PLATFORM_COLOR[pl] + ' ring-1 ring-inset ring-current' : 'bg-bg-hover text-slate-400 border-line'}`}
+                className={`btn flex-1 border ${platforms.includes(pl) ? PLATFORM_COLOR[pl] + ' ring-1 ring-inset ring-current' : 'bg-bg-hover text-ink3 border-line'}`}
               >
                 {PLATFORM_ICON[pl]} {PLATFORM_LABELS[pl]}
               </button>
@@ -306,7 +306,7 @@ function PostModal({
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-          <p className="text-xs text-slate-500 mt-1">{content.length} caractères</p>
+          <p className="text-xs text-ink3 mt-1">{content.length} caractères</p>
         </Field>
 
         <Field label="Image / vidéo (lien, optionnel)" hint="Collez l'URL d'une image ou d'une vidéo à joindre.">
@@ -315,7 +315,7 @@ function PostModal({
 
         <label className="flex items-center gap-3 cursor-pointer select-none">
           <input type="checkbox" checked={schedule} onChange={(e) => setSchedule(e.target.checked)} className="w-4 h-4 accent-brand" />
-          <span className="text-sm text-slate-300">Programmer une date et heure</span>
+          <span className="text-sm text-ink2">Programmer une date et heure</span>
         </label>
 
         {schedule && (

@@ -8,6 +8,7 @@ import {
   Settings,
   Cloud,
   HardDrive,
+  TrendingUp,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
 
@@ -16,7 +17,6 @@ const NAV = [
   { to: '/caisse', label: 'Caisse', icon: Wallet },
   { to: '/prospects', label: 'Prospects', icon: Users },
   { to: '/reseaux', label: 'Réseaux', icon: Megaphone },
-  { to: '/reglages', label: 'Réglages', icon: Settings },
 ]
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -24,69 +24,88 @@ export function Layout({ children }: { children: ReactNode }) {
   const location = useLocation()
 
   return (
-    <div className="min-h-full flex">
-      {/* Sidebar (desktop) */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-line bg-bg-soft/60 backdrop-blur px-4 py-6 sticky top-0 h-screen">
-        <Brand name={settings.businessName} />
-        <nav className="mt-8 flex flex-col gap-1">
-          {NAV.map((n) => (
-            <NavLink
-              key={n.to}
-              to={n.to}
-              end={n.end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
-                  isActive
-                    ? 'bg-brand/15 text-brand-soft'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-bg-hover'
-                }`
-              }
-            >
-              <n.icon size={18} />
-              {n.label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="mt-auto">
-          <ModeBadge mode={mode} />
+    <div className="min-h-full flex flex-col">
+      {/* ── Barre de navigation (bureau) ── */}
+      <header className="hidden lg:block sticky top-0 z-30 px-6 pt-5 pb-2">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white/85 backdrop-blur-xl border border-line rounded-full shadow-nav pl-3 pr-3 py-2 flex items-center gap-2">
+            <Brand name={settings.businessName} />
+            <nav className="flex items-center gap-1 ml-6">
+              {NAV.map((n) => (
+                <NavLink
+                  key={n.to}
+                  to={n.to}
+                  end={n.end}
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition ${
+                      isActive
+                        ? 'bg-brand/10 text-brand-soft'
+                        : 'text-ink2 hover:text-ink hover:bg-bg-hover'
+                    }`
+                  }
+                >
+                  <n.icon size={17} />
+                  {n.label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="ml-auto flex items-center gap-2">
+              <ModeBadge mode={mode} />
+              <NavLink
+                to="/reglages"
+                className={({ isActive }) =>
+                  `w-10 h-10 grid place-items-center rounded-full transition ${
+                    isActive ? 'bg-brand/10 text-brand-soft' : 'text-ink2 hover:text-ink hover:bg-bg-hover'
+                  }`
+                }
+                aria-label="Réglages"
+              >
+                <Settings size={19} />
+              </NavLink>
+            </div>
+          </div>
         </div>
-      </aside>
+      </header>
+
+      {/* Header mobile */}
+      <header className="lg:hidden sticky top-0 z-30 safe-top bg-bg/80 backdrop-blur-xl border-b border-line">
+        <div className="flex items-center justify-between px-4 h-14">
+          <Brand name={settings.businessName} compact />
+          <ModeBadge mode={mode} compact />
+        </div>
+      </header>
 
       {/* Contenu */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header mobile */}
-        <header className="lg:hidden sticky top-0 z-30 safe-top bg-bg/80 backdrop-blur border-b border-line">
-          <div className="flex items-center justify-between px-4 h-14">
-            <Brand name={settings.businessName} compact />
-            <ModeBadge mode={mode} compact />
-          </div>
-        </header>
+      <main
+        key={location.pathname}
+        className="flex-1 px-4 sm:px-6 lg:px-8 pt-4 lg:pt-3 pb-28 lg:pb-12 max-w-6xl w-full mx-auto animate-fade-up"
+      >
+        {children}
+      </main>
 
-        <main
-          key={location.pathname}
-          className="flex-1 px-4 sm:px-6 lg:px-8 py-5 pb-28 lg:pb-8 max-w-5xl w-full mx-auto animate-fade-up"
-        >
-          {children}
-        </main>
-      </div>
-
-      {/* Bottom nav (mobile) */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 safe-bottom bg-bg-soft/95 backdrop-blur border-t border-line">
+      {/* Barre basse (mobile) */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 safe-bottom bg-white/95 backdrop-blur-xl border-t border-line shadow-[0_-6px_24px_-12px_rgba(16,24,40,0.18)]">
         <div className="grid grid-cols-5">
-          {NAV.map((n) => (
+          {[...NAV, { to: '/reglages', label: 'Réglages', icon: Settings }].map((n) => (
             <NavLink
               key={n.to}
               to={n.to}
-              end={n.end}
+              end={(n as any).end}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition ${
-                  isActive ? 'text-brand-soft' : 'text-slate-500'
+                `flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-semibold transition ${
+                  isActive ? 'text-brand-soft' : 'text-ink3'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <n.icon size={20} strokeWidth={isActive ? 2.4 : 1.9} />
+                  <span
+                    className={`grid place-items-center w-9 h-7 rounded-full transition ${
+                      isActive ? 'bg-brand/10' : ''
+                    }`}
+                  >
+                    <n.icon size={20} strokeWidth={isActive ? 2.4 : 1.9} />
+                  </span>
                   {n.label}
                 </>
               )}
@@ -100,17 +119,13 @@ export function Layout({ children }: { children: ReactNode }) {
 
 function Brand({ name, compact }: { name: string; compact?: boolean }) {
   return (
-    <div className="flex items-center gap-2.5">
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-soft to-brand-glow grid place-items-center shadow-glow shrink-0">
-        <span className="text-white font-black text-sm">A</span>
+    <div className="flex items-center gap-2.5 pl-1">
+      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F76B7A] to-[#E42D43] grid place-items-center shadow-glow shrink-0">
+        <TrendingUp className="text-white" size={18} strokeWidth={2.6} />
       </div>
-      {!compact && (
-        <div className="min-w-0">
-          <p className="text-sm font-bold text-slate-100 truncate">{name || 'Mon Entreprise'}</p>
-          <p className="text-[11px] text-slate-500">Tableau de bord</p>
-        </div>
-      )}
-      {compact && <span className="text-sm font-bold text-slate-100 truncate">{name || 'Mon Entreprise'}</span>}
+      <span className="font-extrabold text-ink truncate max-w-[9rem] tracking-tight">
+        {name || 'Mon Entreprise'}
+      </span>
     </div>
   )
 }
@@ -120,7 +135,7 @@ function ModeBadge({ mode, compact }: { mode: string; compact?: boolean }) {
   return (
     <span
       className={`chip ${
-        cloud ? 'border-ok/30 bg-ok/10 text-ok' : 'border-line bg-bg-hover text-slate-400'
+        cloud ? 'border-ok/25 bg-ok/10 text-ok' : 'border-line bg-bg-soft text-ink3'
       }`}
       title={cloud ? 'Synchronisé sur vos appareils' : 'Données sur cet appareil uniquement'}
     >

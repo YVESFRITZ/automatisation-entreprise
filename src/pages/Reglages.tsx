@@ -90,14 +90,14 @@ export default function Reglages() {
         {mode === 'cloud' ? (
           <div className="space-y-3">
             <p className="text-sm text-ok flex items-center gap-2"><Check size={16} /> Synchro active — connecté en tant que <strong>{session?.user.email}</strong></p>
-            <p className="text-sm text-slate-400">Vos données (caisse, prospects, posts) sont partagées en temps réel sur tous vos appareils connectés à ce compte.</p>
+            <p className="text-sm text-ink3">Vos données (caisse, prospects, posts) sont partagées en temps réel sur tous vos appareils connectés à ce compte.</p>
             <button className="btn-danger" onClick={signOut}><LogOut size={16} /> Se déconnecter</button>
           </div>
         ) : (
-          <div className="space-y-3 text-sm text-slate-400">
-            <p className="flex items-center gap-2 text-slate-300"><CloudOff size={16} /> Mode local — les données restent sur cet appareil.</p>
+          <div className="space-y-3 text-sm text-ink3">
+            <p className="flex items-center gap-2 text-ink2"><CloudOff size={16} /> Mode local — les données restent sur cet appareil.</p>
             <p>Pour synchroniser vos 2-3 appareils, activez le cloud gratuit (Supabase) :</p>
-            <ol className="list-decimal list-inside space-y-1.5 text-slate-400">
+            <ol className="list-decimal list-inside space-y-1.5 text-ink3">
               <li>Créez un projet gratuit sur <b>supabase.com</b></li>
               <li>Exécutez le fichier <code className="text-brand-soft">supabase/schema.sql</code> (SQL Editor)</li>
               <li>Copiez l'URL et la clé <i>anon</i> (Settings → API) dans le fichier <code className="text-brand-soft">.env</code></li>
@@ -111,7 +111,7 @@ export default function Reglages() {
       {/* Connexions réseaux sociaux */}
       <Card icon={<Share2 size={18} />} title="Réseaux sociaux — publication automatique">
         <Collapsible summary="Facebook & Instagram (Meta)">
-          <ol className="list-decimal list-inside space-y-1.5 text-sm text-slate-400">
+          <ol className="list-decimal list-inside space-y-1.5 text-sm text-ink3">
             <li>Créez une app sur <b>developers.facebook.com</b> (type « Business »)</li>
             <li>Reliez votre <b>Page Facebook</b> et votre <b>compte Instagram Professionnel</b></li>
             <li>Générez un <b>jeton d'accès longue durée</b> avec les permissions <code className="text-brand-soft">pages_manage_posts</code>, <code className="text-brand-soft">instagram_content_publish</code></li>
@@ -122,7 +122,7 @@ export default function Reglages() {
           </a>
         </Collapsible>
         <Collapsible summary="TikTok">
-          <ol className="list-decimal list-inside space-y-1.5 text-sm text-slate-400">
+          <ol className="list-decimal list-inside space-y-1.5 text-sm text-ink3">
             <li>Créez une app sur <b>developers.tiktok.com</b></li>
             <li>Activez la <b>Content Posting API</b> et demandez l'accès (validation requise)</li>
             <li>Récupérez <code className="text-brand-soft">client_key</code> et <code className="text-brand-soft">client_secret</code></li>
@@ -132,7 +132,7 @@ export default function Reglages() {
             Documentation TikTok <ExternalLink size={12} />
           </a>
         </Collapsible>
-        <p className="text-xs text-slate-500 mt-3">
+        <p className="text-xs text-ink3 mt-3">
           La publication à l'heure programmée est effectuée côté serveur par la fonction <code className="text-brand-soft">supabase/functions/publish-due-posts</code> (déclenchée automatiquement). En attendant, le bouton « Copier & ouvrir » de chaque post vous fait gagner du temps.
         </p>
       </Card>
@@ -145,10 +145,10 @@ export default function Reglages() {
           <button className="btn-danger" onClick={resetLocal}><Trash2 size={16} /> Effacer (local)</button>
           <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={(e) => e.target.files?.[0] && importData(e.target.files[0])} />
         </div>
-        <p className="text-xs text-slate-500 mt-3">Exportez régulièrement une sauvegarde de sécurité, surtout en mode local.</p>
+        <p className="text-xs text-ink3 mt-3">Exportez régulièrement une sauvegarde de sécurité, surtout en mode local.</p>
       </Card>
 
-      <p className="text-center text-xs text-slate-600 pt-2">Automatisation Entreprise · v0.1 · installable comme une application</p>
+      <p className="text-center text-xs text-ink4 pt-2">Automatisation Entreprise · v0.1 · installable comme une application</p>
     </div>
   )
 }
@@ -158,7 +158,7 @@ function Card({ icon, title, children }: { icon: JSX.Element; title: string; chi
     <div className="card p-5">
       <div className="flex items-center gap-2.5 mb-4">
         <span className="w-9 h-9 rounded-xl bg-brand/10 text-brand-soft grid place-items-center">{icon}</span>
-        <h2 className="font-semibold text-slate-100">{title}</h2>
+        <h2 className="font-semibold text-ink">{title}</h2>
       </div>
       {children}
     </div>
@@ -169,7 +169,7 @@ function Collapsible({ summary, children }: { summary: string; children: React.R
   const [open, setOpen] = useState(false)
   return (
     <div className="border border-line rounded-xl mb-2 overflow-hidden">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-200 hover:bg-bg-hover">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-ink hover:bg-bg-hover">
         {summary}
         <ChevronDown size={16} className={`transition ${open ? 'rotate-180' : ''}`} />
       </button>

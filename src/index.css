@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
   * {
     -webkit-tap-highlight-color: transparent;
@@ -15,12 +15,15 @@
     height: 100%;
   }
   body {
-    @apply bg-bg text-slate-200 font-sans antialiased;
-    background-image: radial-gradient(1200px 600px at 100% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
-      radial-gradient(900px 500px at -10% 10%, rgba(56, 189, 248, 0.08), transparent 55%);
+    @apply bg-bg text-ink font-sans antialiased overflow-x-hidden;
+    background-image: radial-gradient(900px 500px at 100% -5%, rgba(242, 75, 94, 0.06), transparent 60%),
+      radial-gradient(800px 460px at -10% 0%, rgba(47, 107, 246, 0.06), transparent 55%);
     background-attachment: fixed;
+    font-feature-settings: 'ss01', 'cv01';
   }
-  /* Safe areas for installed PWA on phones */
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }
@@ -31,40 +34,48 @@
 
 @layer components {
   .card {
-    @apply bg-bg-card/80 border border-line rounded-2xl shadow-card backdrop-blur-sm;
+    @apply bg-bg-card border border-line rounded-2xl shadow-card;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold
     transition active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
   }
   .btn-primary {
-    @apply btn bg-brand text-white hover:bg-brand-glow shadow-glow;
+    @apply btn text-white shadow-glow;
+    background-image: linear-gradient(180deg, #f65566 0%, #ef3a4f 100%);
+  }
+  .btn-primary:hover {
+    background-image: linear-gradient(180deg, #f2465a 0%, #e42d43 100%);
+  }
+  .btn-blue {
+    @apply btn text-white shadow-blue;
+    background-image: linear-gradient(180deg, #3b74f7 0%, #2b5fe6 100%);
   }
   .btn-ghost {
-    @apply btn bg-bg-hover/60 text-slate-200 hover:bg-bg-hover border border-line;
+    @apply btn bg-white text-ink border border-line hover:bg-bg-hover;
   }
   .btn-danger {
-    @apply btn bg-danger/15 text-red-300 hover:bg-danger/25 border border-danger/30;
+    @apply btn bg-danger/10 text-danger hover:bg-danger/15 border border-danger/20;
   }
   .input {
-    @apply w-full rounded-xl bg-bg-soft border border-line px-3.5 py-2.5 text-sm text-slate-100
-    placeholder:text-slate-500 outline-none focus:border-brand-soft focus:ring-2 focus:ring-brand/30 transition;
+    @apply w-full rounded-xl bg-white border border-line px-3.5 py-2.5 text-sm text-ink
+    placeholder:text-ink4 outline-none focus:border-brand focus:ring-4 focus:ring-brand/20 transition;
   }
   .label {
-    @apply block text-[13px] font-medium text-slate-400 mb-1.5;
+    @apply block text-[13px] font-semibold text-ink3 mb-1.5;
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border;
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold border;
   }
 }
 
-/* Nicer scrollbars */
+/* Scrollbars discrètes */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #24314c;
+  background: #d3d8e0;
   border-radius: 9999px;
   border: 3px solid transparent;
   background-clip: content-box;

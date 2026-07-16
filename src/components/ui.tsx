@@ -29,11 +29,11 @@ export function Modal({
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-pop" onClick={onClose} />
-      <div className="relative w-full sm:max-w-lg card rounded-b-none sm:rounded-2xl max-h-[92vh] flex flex-col animate-fade-up safe-bottom">
+      <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm animate-pop" onClick={onClose} />
+      <div className="relative w-full sm:max-w-lg bg-white border border-line rounded-t-3xl sm:rounded-3xl shadow-nav max-h-[92vh] flex flex-col animate-fade-up safe-bottom">
         <div className="flex items-center justify-between px-5 py-4 border-b border-line shrink-0">
-          <h3 className="text-base font-semibold text-slate-100">{title}</h3>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-bg-hover text-slate-400">
+          <h3 className="text-base font-bold text-ink">{title}</h3>
+          <button onClick={onClose} className="p-1.5 rounded-full hover:bg-bg-hover text-ink3">
             <X size={18} />
           </button>
         </div>
@@ -61,18 +61,18 @@ export function StatCard({
   const ring: Record<string, string> = {
     brand: 'text-brand-soft bg-brand/10',
     ok: 'text-ok bg-ok/10',
-    danger: 'text-red-300 bg-danger/10',
-    info: 'text-info bg-info/10',
+    danger: 'text-danger bg-danger/10',
+    info: 'text-azure bg-azure/10',
     warn: 'text-warn bg-warn/10',
   }
   return (
     <div className="card p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
-        <span className="text-[13px] font-medium text-slate-400">{label}</span>
+        <span className="text-[13px] font-semibold text-ink3">{label}</span>
         {icon && <span className={`grid place-items-center w-9 h-9 rounded-xl ${ring[accent]}`}>{icon}</span>}
       </div>
-      <div className="mt-2 text-2xl font-bold tracking-tight text-slate-50 tabular-nums">{value}</div>
-      {sub && <div className="mt-1 text-xs text-slate-400">{sub}</div>}
+      <div className="mt-2.5 text-2xl font-extrabold tracking-tight text-ink tabular-nums">{value}</div>
+      {sub && <div className="mt-1 text-xs font-medium text-ink3">{sub}</div>}
     </div>
   )
 }
@@ -90,11 +90,11 @@ export function EmptyState({
   action?: ReactNode
 }) {
   return (
-    <div className="card p-8 text-center flex flex-col items-center gap-3">
-      <div className="w-14 h-14 grid place-items-center rounded-2xl bg-bg-hover text-slate-400">{icon}</div>
+    <div className="card p-8 sm:p-10 text-center flex flex-col items-center gap-3">
+      <div className="w-16 h-16 grid place-items-center rounded-2xl bg-brand/10 text-brand-soft">{icon}</div>
       <div>
-        <p className="font-semibold text-slate-200">{title}</p>
-        {hint && <p className="text-sm text-slate-400 mt-1 max-w-xs mx-auto">{hint}</p>}
+        <p className="font-bold text-ink text-lg">{title}</p>
+        {hint && <p className="text-sm text-ink3 mt-1.5 max-w-sm mx-auto leading-relaxed">{hint}</p>}
       </div>
       {action}
     </div>
@@ -112,13 +112,13 @@ export function Segmented<T extends string>({
   options: { value: T; label: string; icon?: ReactNode }[]
 }) {
   return (
-    <div className="inline-flex p-1 rounded-xl bg-bg-soft border border-line gap-1">
+    <div className="inline-flex p-1 rounded-full bg-bg-soft border border-line gap-1">
       {options.map((o) => (
         <button
           key={o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition flex items-center gap-1.5 ${
-            value === o.value ? 'bg-brand text-white shadow' : 'text-slate-400 hover:text-slate-200'
+          className={`px-4 py-1.5 rounded-full text-sm font-semibold transition flex items-center gap-1.5 ${
+            value === o.value ? 'bg-white text-ink shadow-soft' : 'text-ink3 hover:text-ink'
           }`}
         >
           {o.icon}
@@ -134,7 +134,7 @@ export function Field({ label, children, hint }: { label: string; children: Reac
     <div>
       <label className="label">{label}</label>
       {children}
-      {hint && <p className="text-xs text-slate-500 mt-1">{hint}</p>}
+      {hint && <p className="text-xs text-ink4 mt-1.5">{hint}</p>}
     </div>
   )
 }
@@ -151,8 +151,8 @@ export function PageHeader({
   return (
     <div className="flex items-end justify-between gap-3 mb-5">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-50 tracking-tight">{title}</h1>
-        {subtitle && <p className="text-sm text-slate-400 mt-0.5">{subtitle}</p>}
+        <h1 className="text-2xl sm:text-[28px] font-extrabold text-ink tracking-tight leading-tight">{title}</h1>
+        {subtitle && <p className="text-sm text-ink3 mt-1">{subtitle}</p>}
       </div>
       {action}
     </div>

@@ -4,46 +4,63 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Surfaces (thème clair)
         bg: {
-          DEFAULT: '#0b1120',
-          soft: '#0f172a',
-          card: '#131c31',
-          hover: '#1b2740',
+          DEFAULT: '#F5F6F9', // fond de page
+          soft: '#EEF1F5', // zones légèrement teintées / inputs
+          card: '#FFFFFF', // cartes
+          hover: '#F1F3F7', // survol
         },
-        line: '#233049',
+        line: '#E6E9EF',
+        // Texte
+        ink: '#0F172A',
+        ink2: '#475569',
+        ink3: '#64748B',
+        ink4: '#94A3B8',
+        // Marque : corail
         brand: {
-          DEFAULT: '#6366f1',
-          soft: '#818cf8',
-          glow: '#4f46e5',
+          DEFAULT: '#F24B5E',
+          soft: '#E11D48',
+          glow: '#DA2C46',
         },
-        ok: '#22c55e',
-        danger: '#ef4444',
-        warn: '#f59e0b',
-        info: '#38bdf8',
+        // Accent secondaire : bleu
+        azure: {
+          DEFAULT: '#2F6BF6',
+          soft: '#1E56E0',
+        },
+        // Sémantique finances
+        ok: '#12A150',
+        danger: '#F0433A',
+        warn: '#F79009',
+        info: '#2F6BF6',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans Variable"', 'Inter', 'system-ui', 'Segoe UI', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 1px 0 0 rgba(255,255,255,0.04) inset, 0 8px 24px -12px rgba(0,0,0,0.6)',
-        glow: '0 0 0 1px rgba(99,102,241,0.35), 0 8px 30px -8px rgba(99,102,241,0.45)',
+        card: '0 1px 2px rgba(16,24,40,0.04), 0 6px 20px -8px rgba(16,24,40,0.10)',
+        soft: '0 2px 10px rgba(16,24,40,0.06)',
+        nav: '0 6px 28px -10px rgba(16,24,40,0.18)',
+        glow: '0 10px 24px -8px rgba(242,75,94,0.45)',
+        blue: '0 10px 24px -8px rgba(47,107,246,0.40)',
       },
       borderRadius: {
         xl2: '1.25rem',
+        '3xl': '1.75rem',
       },
       keyframes: {
         'fade-up': {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        'pop': {
+        pop: {
           '0%': { opacity: '0', transform: 'scale(0.96)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
       animation: {
-        'fade-up': 'fade-up .35s ease both',
-        'pop': 'pop .18s ease both',
+        'fade-up': 'fade-up .4s cubic-bezier(.2,.7,.2,1) both',
+        pop: 'pop .18s ease both',
       },
     },
   },
