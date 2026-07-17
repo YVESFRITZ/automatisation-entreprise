@@ -121,7 +121,8 @@ export function MetaConnect() {
       `&redirect_uri=${encodeURIComponent(redirectUri())}` +
       `&state=${encodeURIComponent(jwt)}` +
       `&scope=${encodeURIComponent(SCOPES)}` +
-      `&response_type=code`
+      `&response_type=code` +
+      `&auth_type=rerequest`
     window.location.href = url
   }
 
