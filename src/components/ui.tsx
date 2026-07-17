@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
-import { X } from 'lucide-react'
+import { X, TrendingUp, TrendingDown } from 'lucide-react'
+import { Sparkline } from './Charts'
 
 // ── Modal / feuille responsive ──────────────────────────────────────
 export function Modal({
@@ -45,18 +46,30 @@ export function Modal({
 }
 
 // ── Carte de statistique ────────────────────────────────────────────
+const ACCENT_HEX: Record<string, string> = {
+  brand: '#F24B5E',
+  ok: '#12A150',
+  danger: '#F0433A',
+  info: '#2F6BF6',
+  warn: '#F79009',
+}
+
 export function StatCard({
   label,
   value,
   sub,
   icon,
   accent = 'brand',
+  trendPct,
+  spark,
 }: {
   label: string
   value: string
   sub?: ReactNode
   icon?: ReactNode
   accent?: 'brand' | 'ok' | 'danger' | 'info' | 'warn'
+  trendPct?: number | null
+  spark?: number[]
 }) {
   const ring: Record<string, string> = {
     brand: 'text-brand-soft bg-brand/10',
@@ -65,14 +78,28 @@ export function StatCard({
     info: 'text-azure bg-azure/10',
     warn: 'text-warn bg-warn/10',
   }
+  const up = (trendPct ?? 0) >= 0
   return (
-    <div className="card p-4 sm:p-5">
+    <div className="card card-hover p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <span className="text-[13px] font-semibold text-ink3">{label}</span>
         {icon && <span className={`grid place-items-center w-9 h-9 rounded-xl ${ring[accent]}`}>{icon}</span>}
       </div>
       <div className="mt-2.5 text-2xl font-extrabold tracking-tight text-ink tabular-nums">{value}</div>
-      {sub && <div className="mt-1 text-xs font-medium text-ink3">{sub}</div>}
+      <div className="mt-1.5 flex items-end justify-between gap-2">
+        <div className="text-xs font-medium text-ink3">
+          {trendPct != null ? (
+            <span className={`inline-flex items-center gap-1 font-semibold ${up ? 'text-ok' : 'text-danger'}`}>
+              {up ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
+              {up ? '+' : ''}{trendPct.toFixed(0)}%
+              <span className="text-ink4 font-normal">/ mois préc.</span>
+            </span>
+          ) : (
+            sub
+          )}
+        </div>
+        {spark && spark.length > 1 && <Sparkline data={spark} color={ACCENT_HEX[accent]} width={72} height={28} />}
+      </div>
     </div>
   )
 }

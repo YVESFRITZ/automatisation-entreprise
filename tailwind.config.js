@@ -38,11 +38,13 @@ export default {
         sans: ['"Plus Jakarta Sans Variable"', 'Inter', 'system-ui', 'Segoe UI', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 1px 2px rgba(16,24,40,0.04), 0 6px 20px -8px rgba(16,24,40,0.10)',
+        card: '0 1px 1px rgba(16,24,40,0.03), 0 2px 6px -2px rgba(16,24,40,0.05), 0 12px 28px -12px rgba(16,24,40,0.10)',
+        lift: '0 2px 4px rgba(16,24,40,0.04), 0 18px 40px -16px rgba(16,24,40,0.20)',
         soft: '0 2px 10px rgba(16,24,40,0.06)',
-        nav: '0 6px 28px -10px rgba(16,24,40,0.18)',
-        glow: '0 10px 24px -8px rgba(242,75,94,0.45)',
-        blue: '0 10px 24px -8px rgba(47,107,246,0.40)',
+        nav: '0 8px 34px -12px rgba(16,24,40,0.20)',
+        glow: '0 8px 22px -8px rgba(242,75,94,0.45)',
+        blue: '0 8px 22px -8px rgba(47,107,246,0.42)',
+        insetTop: 'inset 0 1px 0 0 rgba(255,255,255,0.7)',
       },
       borderRadius: {
         xl2: '1.25rem',
