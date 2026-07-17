@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Zap,
   Trash2,
+  Plus,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
 import { supabase } from '../lib/supabase'
@@ -194,16 +195,30 @@ export function MetaConnect() {
           <p className="text-sm text-ink3">
             Reliez votre Page Facebook (et Instagram) en un clic pour publier automatiquement vos posts programmés.
           </p>
-          <button
-            onClick={connectFacebook}
-            className="btn w-full text-white font-semibold shadow-blue"
-            style={{ background: 'linear-gradient(180deg,#1877F2 0%,#0e5fd8 100%)' }}
-          >
-            <Facebook size={18} /> Se connecter avec Facebook
-          </button>
-          <p className="text-xs text-ink4 text-center flex items-center justify-center gap-1.5">
-            <Instagram size={12} /> Instagram inclus s'il est relié à votre Page.
-          </p>
+
+          {/* Étape 1 : avoir une Page */}
+          <div className="rounded-xl border border-line bg-bg-soft p-3.5">
+            <p className="text-[13px] font-semibold text-ink">1. Vous avez une Page Facebook ?</p>
+            <p className="text-xs text-ink3 mt-0.5 mb-2.5">Une Page (pas le profil perso) est indispensable pour publier. Pas encore de Page ? Créez-la en 1 min.</p>
+            <a href="https://www.facebook.com/pages/create" target="_blank" rel="noreferrer" className="btn-ghost w-full !py-2 text-sm">
+              <Plus size={16} /> Créer ma Page Facebook
+            </a>
+          </div>
+
+          {/* Étape 2 : connecter */}
+          <div>
+            <p className="text-[13px] font-semibold text-ink mb-2">2. Reliez votre compte</p>
+            <button
+              onClick={connectFacebook}
+              className="btn w-full text-white font-semibold shadow-blue"
+              style={{ background: 'linear-gradient(180deg,#1877F2 0%,#0e5fd8 100%)' }}
+            >
+              <Facebook size={18} /> Se connecter avec Facebook
+            </button>
+            <p className="text-xs text-ink4 text-center mt-2 flex items-center justify-center gap-1.5">
+              <Instagram size={12} /> Instagram inclus s'il est relié à votre Page.
+            </p>
+          </div>
         </>
       )}
 
