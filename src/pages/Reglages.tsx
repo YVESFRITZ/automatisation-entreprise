@@ -12,10 +12,12 @@ import {
   Check,
   ChevronDown,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
 import { Field, PageHeader } from '../components/ui'
 import { MetaConnect } from '../components/MetaConnect'
+import { WhatsAppConnect } from '../components/WhatsAppConnect'
 import type { AppData, Settings } from '../lib/types'
 
 export default function Reglages() {
@@ -123,6 +125,11 @@ export default function Reglages() {
             </a>
           </Collapsible>
         </div>
+      </Card>
+
+      {/* WhatsApp */}
+      <Card icon={<MessageCircle size={18} />} title="WhatsApp — messages aux prospects">
+        <WhatsAppConnect />
       </Card>
 
       {/* Données */}
