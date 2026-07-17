@@ -20,6 +20,7 @@ import {
   Wand2,
   Eye,
   EyeOff,
+  Loader2,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
 import { uid, nowISO, dateTimeLabel } from '../lib/format'
@@ -31,7 +32,7 @@ import {
   type PostStatus,
 } from '../lib/types'
 import { Modal, EmptyState, Field, PageHeader, Segmented } from '../components/ui'
-import { cloudEnabled } from '../lib/supabase'
+import { cloudEnabled, supabase } from '../lib/supabase'
 import { PostPreview, MonthCalendar } from '../components/SocialExtras'
 import {
   OBJECTIFS,
@@ -60,13 +61,32 @@ const CREATE_URL: Record<Platform, string> = {
 }
 
 export default function Social() {
-  const { data, addPost, updatePost, deletePost } = useApp()
+  const { data, addPost, updatePost, deletePost, reload } = useApp()
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<Post | null>(null)
   const [view, setView] = useState<'liste' | 'calendrier'>('liste')
   const [calMonth, setCalMonth] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState<Date | null>(new Date())
   const [presetDate, setPresetDate] = useState<Date | null>(null)
+  const [publishing, setPublishing] = useState(false)
+  const [publishMsg, setPublishMsg] = useState<string | null>(null)
+
+  async function publishNow() {
+    if (!supabase) return
+    setPublishing(true)
+    setPublishMsg(null)
+    try {
+      const { data: res, error } = await supabase.functions.invoke('publish-due-posts')
+      if (error) throw error
+      const n = (res as any)?.published ?? 0
+      setPublishMsg(n > 0 ? `✅ ${n} post(s) publié(s) !` : "Aucun post à publier maintenant (rien de programmé et arrivé à échéance).")
+      await reload()
+    } catch (e: any) {
+      setPublishMsg('❌ ' + (e?.message ?? 'Échec — vérifiez la connexion Meta dans Réglages.'))
+    } finally {
+      setPublishing(false)
+    }
+  }
 
   const groups = useMemo(() => {
     const programme = data.posts
@@ -110,18 +130,30 @@ export default function Social() {
       />
 
       {/* Bannière automatisation */}
-      <div className="card p-4 flex items-start gap-3">
-        <div className="w-9 h-9 rounded-xl bg-brand/10 text-brand-soft grid place-items-center shrink-0">
-          <Megaphone size={18} />
+      <div className="card p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-xl bg-brand/10 text-brand-soft grid place-items-center shrink-0">
+            <Megaphone size={18} />
+          </div>
+          <div className="text-sm text-ink2 flex-1">
+            <p className="font-semibold text-ink">Publication automatique</p>
+            <p className="text-ink3 mt-0.5">
+              {cloudEnabled
+                ? "Vos comptes connectés dans Réglages, les posts programmés partent tout seuls à l'heure prévue (vérifié toutes les 5 min)."
+                : "Programmez vos posts ici. Pour la publication 100% automatique, activez le cloud puis connectez vos comptes (Réglages)."}
+            </p>
+          </div>
+          {cloudEnabled && (
+            <button onClick={publishNow} disabled={publishing} className="btn-ghost !py-2 text-xs shrink-0">
+              {publishing ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Publier les dûs
+            </button>
+          )}
         </div>
-        <div className="text-sm text-ink2">
-          <p className="font-semibold text-ink">Publication automatique</p>
-          <p className="text-ink3 mt-0.5">
-            {cloudEnabled
-              ? "Une fois vos comptes connectés dans Réglages, les posts programmés partent tout seuls à l'heure prévue."
-              : "Programmez vos posts ici. Pour la publication 100% automatique, activez le cloud puis connectez vos comptes (Réglages)."}
+        {publishMsg && (
+          <p className={`text-xs mt-3 rounded-lg px-3 py-2 border ${publishMsg.startsWith('✅') ? 'bg-ok/10 border-ok/25 text-ok' : publishMsg.startsWith('❌') ? 'bg-danger/10 border-danger/25 text-danger' : 'bg-bg-soft border-line text-ink3'}`}>
+            {publishMsg}
           </p>
-        </div>
+        )}
       </div>
 
       {/* Bascule Liste / Calendrier */}

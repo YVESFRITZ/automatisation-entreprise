@@ -14,8 +14,8 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
-import { cloudEnabled } from '../lib/supabase'
 import { Field, PageHeader } from '../components/ui'
+import { MetaConnect } from '../components/MetaConnect'
 import type { AppData, Settings } from '../lib/types'
 
 export default function Reglages() {
@@ -109,32 +109,20 @@ export default function Reglages() {
       </Card>
 
       {/* Connexions réseaux sociaux */}
-      <Card icon={<Share2 size={18} />} title="Réseaux sociaux — publication automatique">
-        <Collapsible summary="Facebook & Instagram (Meta)">
-          <ol className="list-decimal list-inside space-y-1.5 text-sm text-ink3">
-            <li>Créez une app sur <b>developers.facebook.com</b> (type « Business »)</li>
-            <li>Reliez votre <b>Page Facebook</b> et votre <b>compte Instagram Professionnel</b></li>
-            <li>Générez un <b>jeton d'accès longue durée</b> avec les permissions <code className="text-brand-soft">pages_manage_posts</code>, <code className="text-brand-soft">instagram_content_publish</code></li>
-            <li>Ajoutez ce jeton dans les <b>secrets Supabase</b> (voir <code className="text-brand-soft">supabase/README.md</code>) — jamais dans l'app</li>
-          </ol>
-          <a href="https://developers.facebook.com/docs/instagram-api/guides/content-publishing" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-brand-soft hover:underline">
-            Documentation Meta <ExternalLink size={12} />
-          </a>
-        </Collapsible>
-        <Collapsible summary="TikTok">
-          <ol className="list-decimal list-inside space-y-1.5 text-sm text-ink3">
-            <li>Créez une app sur <b>developers.tiktok.com</b></li>
-            <li>Activez la <b>Content Posting API</b> et demandez l'accès (validation requise)</li>
-            <li>Récupérez <code className="text-brand-soft">client_key</code> et <code className="text-brand-soft">client_secret</code></li>
-            <li>Ajoutez-les dans les <b>secrets Supabase</b></li>
-          </ol>
-          <a href="https://developers.tiktok.com/doc/content-posting-api-get-started" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-brand-soft hover:underline">
-            Documentation TikTok <ExternalLink size={12} />
-          </a>
-        </Collapsible>
-        <p className="text-xs text-ink3 mt-3">
-          La publication à l'heure programmée est effectuée côté serveur par la fonction <code className="text-brand-soft">supabase/functions/publish-due-posts</code> (déclenchée automatiquement). En attendant, le bouton « Copier & ouvrir » de chaque post vous fait gagner du temps.
-        </p>
+      <Card icon={<Share2 size={18} />} title="Facebook & Instagram — publication automatique">
+        <MetaConnect />
+        <div className="mt-5 pt-4 border-t border-line">
+          <Collapsible summary="TikTok (bientôt)">
+            <ol className="list-decimal list-inside space-y-1.5 text-sm text-ink3">
+              <li>Créez une app sur <b>developers.tiktok.com</b></li>
+              <li>Activez la <b>Content Posting API</b> et demandez l'accès (validation requise)</li>
+              <li>Récupérez <code className="text-brand-soft">client_key</code> et <code className="text-brand-soft">client_secret</code></li>
+            </ol>
+            <a href="https://developers.tiktok.com/doc/content-posting-api-get-started" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-brand-soft hover:underline">
+              Documentation TikTok <ExternalLink size={12} />
+            </a>
+          </Collapsible>
+        </div>
       </Card>
 
       {/* Données */}
