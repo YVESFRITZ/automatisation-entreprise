@@ -31,7 +31,7 @@ function redirectUri(): string {
 }
 
 const FB_MESSAGES: Record<string, { ok: boolean; text: string }> = {
-  ok: { ok: true, text: '🎉 Facebook connecté ! Vos posts programmés partiront automatiquement.' },
+  ok: { ok: true, text: 'Facebook connecté. Vos posts programmés partiront automatiquement.' },
   nopage: { ok: false, text: "Aucune Page Facebook trouvée sur ce compte. Créez une Page puis réessayez." },
   cancel: { ok: false, text: 'Connexion annulée.' },
   autherror: { ok: false, text: 'Session expirée — reconnectez-vous puis réessayez.' },

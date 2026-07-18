@@ -69,7 +69,7 @@ export default function Social() {
   const [selectedDay, setSelectedDay] = useState<Date | null>(new Date())
   const [presetDate, setPresetDate] = useState<Date | null>(null)
   const [publishing, setPublishing] = useState(false)
-  const [publishMsg, setPublishMsg] = useState<string | null>(null)
+  const [publishMsg, setPublishMsg] = useState<{ tone: 'ok' | 'danger' | 'neutral'; text: string } | null>(null)
 
   async function publishNow() {
     if (!supabase) return
@@ -79,10 +79,14 @@ export default function Social() {
       const { data: res, error } = await supabase.functions.invoke('publish-due-posts')
       if (error) throw error
       const n = (res as any)?.published ?? 0
-      setPublishMsg(n > 0 ? `✅ ${n} post(s) publié(s) !` : "Aucun post à publier maintenant (rien de programmé et arrivé à échéance).")
+      setPublishMsg(
+        n > 0
+          ? { tone: 'ok', text: `${n} post(s) publié(s).` }
+          : { tone: 'neutral', text: 'Aucun post à publier maintenant (rien de programmé et arrivé à échéance).' },
+      )
       await reload()
     } catch (e: any) {
-      setPublishMsg('❌ ' + (e?.message ?? 'Échec — vérifiez la connexion Meta dans Réglages.'))
+      setPublishMsg({ tone: 'danger', text: e?.message ?? 'Échec — vérifiez la connexion Meta dans Réglages.' })
     } finally {
       setPublishing(false)
     }
@@ -150,8 +154,8 @@ export default function Social() {
           )}
         </div>
         {publishMsg && (
-          <p className={`text-xs mt-3 rounded-lg px-3 py-2 border ${publishMsg.startsWith('✅') ? 'bg-ok/10 border-ok/25 text-ok' : publishMsg.startsWith('❌') ? 'bg-danger/10 border-danger/25 text-danger' : 'bg-bg-soft border-line text-ink3'}`}>
-            {publishMsg}
+          <p className={`text-xs mt-3 rounded-lg px-3 py-2 border ${publishMsg.tone === 'ok' ? 'bg-ok/10 border-ok/25 text-ok' : publishMsg.tone === 'danger' ? 'bg-danger/10 border-danger/25 text-danger' : 'bg-bg-soft border-line text-ink3'}`}>
+            {publishMsg.text}
           </p>
         )}
       </div>

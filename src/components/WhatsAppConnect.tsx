@@ -68,13 +68,13 @@ export function WhatsAppConnect() {
     setMsg(null)
     try {
       const { data, error } = await supabase.functions.invoke('send-whatsapp', {
-        body: { to: testTo.trim(), message: 'Test ✅ Votre WhatsApp est bien connecté à Automatisation Entreprise.' },
+        body: { to: testTo.trim(), message: 'Test : votre WhatsApp est bien connecté à Automatisation Entreprise.' },
       })
       if (error) throw error
       if ((data as any)?.error) throw new Error((data as any).error)
-      setMsg({ ok: true, text: '✅ Message envoyé ! Vérifiez WhatsApp sur le numéro destinataire.' })
+      setMsg({ ok: true, text: 'Message envoyé. Vérifiez WhatsApp sur le numéro destinataire.' })
     } catch (e: any) {
-      setMsg({ ok: false, text: '❌ ' + (e?.message ?? 'Échec de l’envoi') })
+      setMsg({ ok: false, text: e?.message ?? 'Échec de l’envoi' })
     } finally {
       setSending(false)
     }

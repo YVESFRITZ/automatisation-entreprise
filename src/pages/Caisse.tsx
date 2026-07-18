@@ -16,6 +16,7 @@ import { money, monthKey, monthLabel, dateLabel, todayISO, nowISO, uid } from '.
 import { TX_CATEGORIES, type Transaction, type TxType } from '../lib/types'
 import { Modal, StatCard, EmptyState, Segmented, Field, PageHeader } from '../components/ui'
 import { GroupedBars } from '../components/Charts'
+import { AnimatedNumber } from '../components/AnimatedNumber'
 import { format, subMonths } from 'date-fns'
 
 export default function Caisse() {
@@ -90,17 +91,17 @@ export default function Caisse() {
       </div>
 
       {/* Statistiques */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard label="Entrées du mois" value={money(totals.entree, currency)} icon={<TrendingUp size={18} />} accent="ok" />
-        <StatCard label="Sorties du mois" value={money(totals.sortie, currency)} icon={<TrendingDown size={18} />} accent="danger" />
+      <div className="stagger grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <StatCard label="Entrées du mois" value={<AnimatedNumber value={totals.entree} currency={currency} />} icon={<TrendingUp size={18} />} accent="ok" />
+        <StatCard label="Sorties du mois" value={<AnimatedNumber value={totals.sortie} currency={currency} />} icon={<TrendingDown size={18} />} accent="danger" />
         <StatCard
           label="Solde du mois"
-          value={money(totals.net, currency)}
+          value={<AnimatedNumber value={totals.net} currency={currency} />}
           sub={totals.net >= 0 ? 'Bénéfice' : 'Déficit'}
           icon={<Scale size={18} />}
           accent={totals.net >= 0 ? 'ok' : 'danger'}
         />
-        <StatCard label="Solde total (cumul)" value={money(totals.global, currency)} icon={<Wallet size={18} />} accent="brand" />
+        <StatCard label="Solde total (cumul)" value={<AnimatedNumber value={totals.global} currency={currency} />} icon={<Wallet size={18} />} accent="brand" />
       </div>
 
       {/* Graphique 6 mois */}

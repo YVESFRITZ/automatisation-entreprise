@@ -64,7 +64,7 @@ export function StatCard({
   spark,
 }: {
   label: string
-  value: string
+  value: ReactNode
   sub?: ReactNode
   icon?: ReactNode
   accent?: 'brand' | 'ok' | 'danger' | 'info' | 'warn'

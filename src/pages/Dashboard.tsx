@@ -17,6 +17,7 @@ import { useApp } from '../lib/store'
 import { money, monthKey, nowISO, dateLabel, dateTimeLabel, initials } from '../lib/format'
 import { StatCard } from '../components/ui'
 import { Sparkline } from '../components/Charts'
+import { AnimatedNumber } from '../components/AnimatedNumber'
 import { PLATFORM_LABELS, type Platform } from '../lib/types'
 
 export default function Dashboard() {
@@ -103,7 +104,7 @@ export default function Dashboard() {
             )}
           </div>
           <p className="mt-1.5 text-[2.5rem] sm:text-5xl font-extrabold tracking-tight tabular-nums leading-none">
-            {money(stats.net, currency)}
+            <AnimatedNumber value={stats.net} currency={currency} />
           </p>
           <div className="mt-5 flex flex-wrap gap-2.5">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold">
@@ -122,15 +123,15 @@ export default function Dashboard() {
       </div>
 
       {/* Stats secondaires */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard label="Entrées (mois)" value={money(stats.entree, currency)} icon={<TrendingUp size={18} />} accent="ok" trendPct={stats.entreeTrend} spark={series.map((s) => s.entree)} />
-        <StatCard label="Bénéfice net" value={money(stats.net, currency)} icon={<Scale size={18} />} accent={netPositive ? 'ok' : 'danger'} trendPct={stats.netTrend} spark={series.map((s) => s.net)} />
-        <StatCard label="À relancer" value={String(stats.relance)} sub="prospects" icon={<Users size={18} />} accent="warn" />
-        <StatCard label="Posts programmés" value={String(stats.programmes)} sub="à venir" icon={<Clock size={18} />} accent="info" />
+      <div className="stagger grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <StatCard label="Entrées (mois)" value={<AnimatedNumber value={stats.entree} currency={currency} />} icon={<TrendingUp size={18} />} accent="ok" trendPct={stats.entreeTrend} spark={series.map((s) => s.entree)} />
+        <StatCard label="Bénéfice net" value={<AnimatedNumber value={stats.net} currency={currency} />} icon={<Scale size={18} />} accent={netPositive ? 'ok' : 'danger'} trendPct={stats.netTrend} spark={series.map((s) => s.net)} />
+        <StatCard label="À relancer" value={<AnimatedNumber value={stats.relance} plain />} sub="prospects" icon={<Users size={18} />} accent="warn" />
+        <StatCard label="Posts programmés" value={<AnimatedNumber value={stats.programmes} plain />} sub="à venir" icon={<Clock size={18} />} accent="info" />
       </div>
 
       {/* Actions rapides */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="stagger grid grid-cols-2 sm:grid-cols-4 gap-3">
         <QuickAction icon={<ArrowDownLeft size={18} />} label="Entrée" onClick={() => navigate('/caisse')} tone="ok" />
         <QuickAction icon={<ArrowUpRight size={18} />} label="Sortie" onClick={() => navigate('/caisse')} tone="danger" />
         <QuickAction icon={<MessageCircle size={18} />} label="Prospect" onClick={() => navigate('/prospects')} tone="brand" />
