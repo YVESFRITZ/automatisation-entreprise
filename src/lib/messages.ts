@@ -18,7 +18,7 @@ export const TEMPLATES: Template[] = [
     id: 'offre',
     title: 'Offre du moment',
     body:
-      "Bonjour {nom} 👋 Chez {entreprise} nous avons une offre spéciale en ce moment. Je serais ravi de vous présenter les détails. Quand seriez-vous disponible ?",
+      "Bonjour {nom}, chez {entreprise} nous avons une offre spéciale en ce moment. Je serais ravi de vous présenter les détails. Quand seriez-vous disponible ?",
   },
   {
     id: 'relance',
@@ -36,7 +36,7 @@ export const TEMPLATES: Template[] = [
     id: 'merci',
     title: 'Remerciement client',
     body:
-      "Bonjour {nom}, merci pour votre confiance 🙏 N'hésitez pas si vous avez la moindre question, {entreprise} reste à votre écoute.",
+      "Bonjour {nom}, merci pour votre confiance. N'hésitez pas si vous avez la moindre question, {entreprise} reste à votre écoute.",
   },
 ]
 

@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import { useApp } from '../lib/store'
+import { ThemeToggle } from './ThemeToggle'
 
 const NAV = [
   { to: '/', label: 'Accueil', icon: LayoutDashboard, end: true },
@@ -28,7 +29,7 @@ export function Layout({ children }: { children: ReactNode }) {
       {/* ── Barre de navigation (bureau) ── */}
       <header className="hidden lg:block sticky top-0 z-30 px-6 pt-5 pb-2">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white/85 backdrop-blur-xl border border-line rounded-full shadow-nav pl-3 pr-3 py-2 flex items-center gap-2">
+          <div className="bg-bg-card/85 backdrop-blur-xl border border-line rounded-full shadow-nav pl-3 pr-3 py-2 flex items-center gap-2">
             <Brand name={settings.businessName} />
             <nav className="flex items-center gap-1 ml-6">
               {NAV.map((n) => (
@@ -49,8 +50,9 @@ export function Layout({ children }: { children: ReactNode }) {
                 </NavLink>
               ))}
             </nav>
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-1.5">
               <ModeBadge mode={mode} />
+              <ThemeToggle className="w-10 h-10" />
               <NavLink
                 to="/reglages"
                 className={({ isActive }) =>
@@ -71,7 +73,10 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="lg:hidden sticky top-0 z-30 safe-top bg-bg/80 backdrop-blur-xl border-b border-line">
         <div className="flex items-center justify-between px-4 h-14">
           <Brand name={settings.businessName} compact />
-          <ModeBadge mode={mode} compact />
+          <div className="flex items-center gap-1">
+            <ThemeToggle className="w-9 h-9" />
+            <ModeBadge mode={mode} compact />
+          </div>
         </div>
       </header>
 
@@ -84,7 +89,7 @@ export function Layout({ children }: { children: ReactNode }) {
       </main>
 
       {/* Barre basse (mobile) */}
-      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 safe-bottom bg-white/95 backdrop-blur-xl border-t border-line shadow-[0_-6px_24px_-12px_rgba(16,24,40,0.18)]">
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 safe-bottom bg-bg-card/95 backdrop-blur-xl border-t border-line shadow-[0_-6px_24px_-12px_rgba(16,24,40,0.18)]">
         <div className="grid grid-cols-5">
           {[...NAV, { to: '/reglages', label: 'Réglages', icon: Settings }].map((n) => (
             <NavLink

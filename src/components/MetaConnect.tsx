@@ -51,7 +51,7 @@ export function MetaConnect() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [testing, setTesting] = useState(false)
-  const [testMsg, setTestMsg] = useState<string | null>(null)
+  const [testMsg, setTestMsg] = useState<{ ok: boolean; text: string } | null>(null)
   const [advanced, setAdvanced] = useState(false)
   const [guide, setGuide] = useState(false)
   const [returnMsg, setReturnMsg] = useState<{ ok: boolean; text: string } | null>(null)
@@ -158,10 +158,10 @@ export function MetaConnect() {
         `https://graph.facebook.com/v21.0/${pageId.trim()}?fields=name&access_token=${encodeURIComponent(token.trim())}`,
       )
       const j = await r.json()
-      if (j.error) setTestMsg('❌ ' + (j.error.message ?? 'Jeton ou Page ID invalide'))
-      else setTestMsg('✅ Connecté à la Page : ' + j.name)
+      if (j.error) setTestMsg({ ok: false, text: j.error.message ?? 'Jeton ou Page ID invalide' })
+      else setTestMsg({ ok: true, text: 'Connecté à la Page : ' + j.name })
     } catch {
-      setTestMsg('❌ Impossible de joindre Facebook')
+      setTestMsg({ ok: false, text: 'Impossible de joindre Facebook' })
     } finally {
       setTesting(false)
     }
@@ -188,7 +188,7 @@ export function MetaConnect() {
             <button className="btn-danger" onClick={disconnect}><Trash2 size={16} /> Déconnecter</button>
           </div>
           {testMsg && (
-            <p className={`text-sm rounded-lg px-3 py-2 border ${testMsg.startsWith('✅') ? 'bg-ok/10 border-ok/25 text-ok' : 'bg-danger/10 border-danger/25 text-danger'}`}>{testMsg}</p>
+            <p className={`text-sm rounded-lg px-3 py-2 border ${testMsg.ok ? 'bg-ok/10 border-ok/25 text-ok' : 'bg-danger/10 border-danger/25 text-danger'}`}>{testMsg.text}</p>
           )}
         </div>
       ) : (
@@ -253,7 +253,7 @@ export function MetaConnect() {
               </button>
             </div>
             {testMsg && (
-              <p className={`text-sm rounded-lg px-3 py-2 border ${testMsg.startsWith('✅') ? 'bg-ok/10 border-ok/25 text-ok' : 'bg-danger/10 border-danger/25 text-danger'}`}>{testMsg}</p>
+              <p className={`text-sm rounded-lg px-3 py-2 border ${testMsg.ok ? 'bg-ok/10 border-ok/25 text-ok' : 'bg-danger/10 border-danger/25 text-danger'}`}>{testMsg.text}</p>
             )}
           </div>
         )}

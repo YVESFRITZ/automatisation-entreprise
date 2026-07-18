@@ -31,7 +31,7 @@ export function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm animate-pop" onClick={onClose} />
-      <div className="relative w-full sm:max-w-lg bg-white border border-line rounded-t-3xl sm:rounded-3xl shadow-nav max-h-[92vh] flex flex-col animate-fade-up safe-bottom">
+      <div className="relative w-full sm:max-w-lg bg-bg-card border border-line rounded-t-3xl sm:rounded-3xl shadow-nav max-h-[92vh] flex flex-col animate-fade-up safe-bottom">
         <div className="flex items-center justify-between px-5 py-4 border-b border-line shrink-0">
           <h3 className="text-base font-bold text-ink">{title}</h3>
           <button onClick={onClose} className="p-1.5 rounded-full hover:bg-bg-hover text-ink3">
@@ -145,7 +145,7 @@ export function Segmented<T extends string>({
           key={o.value}
           onClick={() => onChange(o.value)}
           className={`px-4 py-1.5 rounded-full text-sm font-semibold transition flex items-center gap-1.5 ${
-            value === o.value ? 'bg-white text-ink shadow-soft' : 'text-ink3 hover:text-ink'
+            value === o.value ? 'bg-bg-card text-ink shadow-soft' : 'text-ink3 hover:text-ink'
           }`}
         >
           {o.icon}

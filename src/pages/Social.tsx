@@ -456,16 +456,16 @@ function PostModal({
                       setObjectif(t.objectif)
                       setContent(generateCaption(t.objectif, sujet, settings.businessName))
                     }}
-                    className="chip border-line bg-white text-ink2 hover:border-brand hover:text-brand-soft"
+                    className="chip border-line bg-bg-card text-ink2 hover:border-brand hover:text-brand-soft"
                   >
-                    {t.emoji} {t.title}
+                    {t.title}
                   </button>
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <select className="input" value={objectif} onChange={(e) => setObjectif(e.target.value as Objectif)}>
                   {OBJECTIFS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.emoji} {o.label}</option>
+                    <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
                 <input className="input" placeholder="Sujet (ex : nos jus)" value={sujet} onChange={(e) => setSujet(e.target.value)} />

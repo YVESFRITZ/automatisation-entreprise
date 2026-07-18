@@ -26,14 +26,14 @@ export function PostPreview({
   mediaUrl?: string
 }) {
   return (
-    <div className="rounded-2xl border border-line bg-white overflow-hidden shadow-soft max-w-sm mx-auto">
+    <div className="rounded-2xl border border-line bg-bg-card overflow-hidden shadow-soft max-w-sm mx-auto">
       <div className="flex items-center gap-2.5 px-3.5 py-3">
         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#F76B7A] to-[#E42D43] grid place-items-center text-white text-xs font-bold">
           {initials(businessName || 'ME')}
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-ink truncate leading-tight">{businessName || 'Mon Entreprise'}</p>
-          <p className="text-[11px] text-ink4">À l’instant · 🌍</p>
+          <p className="text-[11px] text-ink4">À l’instant · Public</p>
         </div>
         <MoreHorizontal size={18} className="text-ink4" />
       </div>

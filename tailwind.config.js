@@ -1,22 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Surfaces (thème clair)
+        // Surfaces (canaux RGB en variables CSS -> bascule clair/sombre + opacité)
         bg: {
-          DEFAULT: '#F5F6F9', // fond de page
-          soft: '#EEF1F5', // zones légèrement teintées / inputs
-          card: '#FFFFFF', // cartes
-          hover: '#F1F3F7', // survol
+          DEFAULT: 'rgb(var(--bg) / <alpha-value>)',
+          soft: 'rgb(var(--bg-soft) / <alpha-value>)',
+          card: 'rgb(var(--bg-card) / <alpha-value>)',
+          hover: 'rgb(var(--bg-hover) / <alpha-value>)',
         },
-        line: '#E6E9EF',
+        line: 'rgb(var(--line) / <alpha-value>)',
         // Texte
-        ink: '#0F172A',
-        ink2: '#475569',
-        ink3: '#64748B',
-        ink4: '#94A3B8',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        ink2: 'rgb(var(--ink2) / <alpha-value>)',
+        ink3: 'rgb(var(--ink3) / <alpha-value>)',
+        ink4: 'rgb(var(--ink4) / <alpha-value>)',
         // Marque : corail
         brand: {
           DEFAULT: '#F24B5E',
